@@ -1,2 +1,2 @@
-# SVGlogo
+# SVG logo
 Challenge 10
