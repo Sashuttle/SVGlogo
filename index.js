@@ -18,7 +18,7 @@ class SVG {
 
   // Add square (rectangle)
   addRectangle(x, y, width, height, color) {
-    const rect = `<rect x="${x}" y="${y}" width="${width}" height="${height}" fill="${color}" />`;
+    const rect = `<rect x="${x}px" y="${y}px" width="${width}px" height="${height}px" fill="${color}" />`;
     this.elements.push(rect);
   }
 
@@ -30,7 +30,7 @@ class SVG {
 
   // Add text
   drawText(text, x, y, color) {
-    const textElement = `<text x="${x}" y="${y}" fill="${color}" font-size="40" text-anchor="middle">${text}</text>`;
+    const textElement = `<text x="${x}" y="${y}" fill="${color}" font-size="50" text-anchor="middle" dominant-baseline= "middle">${text}</text>`;
     this.elements.push(textElement);
   }
 
@@ -70,20 +70,20 @@ const questions = [
 const listOfQuestions = (questions, callback) => {
   return inquirer.prompt(questions).then((answers) => {
     const { text, textColor, shapes, shapesColor } = answers;
-    const svg = new SVG(100, 100);
+    const svg = new SVG(200, 300);
 
     // Create the shape based on user input
     if (shapes === "Circle") {
-      svg.addCircle(40, shapesColor);
+      svg.addCircle(90, shapesColor);
+      svg.drawText(text, 100, 150, textColor);
     } else if (shapes === "Square") {
-      svg.addRectangle(20, 20, 60, 60, shapesColor);
+      svg.addRectangle(10, 20, 600, 400, shapesColor);
+      svg.drawText(text, 100, 150, textColor);
     } else if (shapes === "Triangle") {
-      const points = "50,10 90,90 10,90";
+      const points = "100,0 200,150 0,150";
       svg.addTriangle(points, shapesColor);
+      svg.drawText(text, 100, 100, textColor);
     }
-
-    // Add text to the SVG
-    svg.drawText(text, 50, 60, textColor);
 
     // Render the SVG content and call the callback with it
     const svgContent = svg.render();
@@ -93,11 +93,12 @@ const listOfQuestions = (questions, callback) => {
 
 // Function to write SVG content to a file
 const writeToFile = (svgContent) => {
-  fs.writeFile("logo.svg", svgContent, (err) => {
+  const currentSeconds = Math.floor(Date.now() / 1000);
+  fs.writeFile("./examples/logo-"+currentSeconds+".svg", svgContent, (err) => {
     if (err) {
       console.error("Error writing the SVG file:", err);
     } else {
-      console.log("SVG file 'logo.svg' created successfully.");
+      console.log("SVG file './examples/logo-"+currentSeconds+".svg' created successfully.");
     }
   });
 };
